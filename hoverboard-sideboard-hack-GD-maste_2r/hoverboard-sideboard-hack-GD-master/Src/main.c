@@ -84,7 +84,7 @@ int main(void)
 	i2c_nvic_config();									// NVIC peripheral config	
 	mpu.euler.pitch_old=0;
 	#ifdef SERIAL_CONTROL
-		usart_Tx_DMA_config(USART_MAIN, (uint8_t *)&Command, sizeof(Command));
+		usart_Tx_DMA_config(USART_MAIN, (uint8_t *)&Sideboard, sizeof(Sideboard));
 	#endif
 	#ifdef SERIAL_FEEDBACK
 		usart_Rx_DMA_config(USART_MAIN, (uint8_t *)&NewFeedback, sizeof(NewFeedback));
@@ -192,16 +192,16 @@ int main(void)
 				
 				Sideboard.start    	= (uint16_t)SERIAL_START_FRAME;
 				Sideboard.angle    	= (int16_t)mpu.euler.pitch;
-				Sideboard.angle_dot    	= (int16_t)angle_dot;
-				Sideboard.sensors	= (uint16_t)(sensor1 | (sensor2 << 1) | (mpuStatus << 2));
+				Sideboard.angle_dot = (int16_t)angle_dot;
+				Sideboard.sensors		= (uint16_t)(sensor1 | (sensor2 << 1) | (mpuStatus << 2));
 				Sideboard.checksum 	= (uint16_t)(Sideboard.start ^ Sideboard.angle ^ Sideboard.angle_dot ^ Sideboard.sensors);
 					Command.start    = (uint16_t)SERIAL_START_FRAME;
 					Command.steer    = (int16_t) -100;
 					Command.speed    = (int16_t) 250;
 					Command.checksum = (uint16_t)(Command.start ^ Command.steer ^ Command.speed);
 				dma_channel_disable(DMA_CH3);
-				DMA_CHCNT(DMA_CH3) 		= sizeof(Command);
-				DMA_CHMADDR(DMA_CH3) 	= (uint32_t)&Command;
+				DMA_CHCNT(DMA_CH3) 		= sizeof(Sideboard);
+				DMA_CHMADDR(DMA_CH3) 	= (uint32_t)&Sideboard;
 				dma_channel_enable(DMA_CH3);		
 			}
 		#endif
