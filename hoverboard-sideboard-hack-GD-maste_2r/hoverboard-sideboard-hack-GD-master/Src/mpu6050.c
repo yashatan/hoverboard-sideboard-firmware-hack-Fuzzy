@@ -3370,12 +3370,14 @@ unsigned short inv_orientation_matrix_to_scalar(const signed char *mtx)
 
 
 /**
- *  @}
+ *  @
  */
 int Calib_mpu(void)
 	{
-	long gyro_bias[3] ={124840 	 , 22610 	 , -10141};
-	long accel_bias[3] = {1933 ,	 1370 ,	 2408};
+//	long gyro_bias[3] ={124840 	 , 22610 	 , -10141}; //for left sensor
+//	long accel_bias[3] = {1933 ,	 1370 ,	 2408}; // for left sensor
+	long gyro_bias[3] ={-45268, 12792, -60783}; // for right sensor
+	long accel_bias[3] = {1703 ,-1090 ,0}; // for right sensor
 	unsigned char i;
 	for(i = 0; i<3; i++) {
         	gyro_bias[i] = (long)(gyro_bias[i] * 32.8f); //convert to +-1000dps
@@ -3472,7 +3474,7 @@ int mpu_config(void)
      * DMP sensor fusion works only with gyro at +-2000dps and accel +-2G
      */
     hal.dmp_features = 	DMP_FEATURE_6X_LP_QUAT | DMP_FEATURE_TAP | DMP_FEATURE_ANDROID_ORIENT |
-												DMP_FEATURE_SEND_RAW_ACCEL | DMP_FEATURE_SEND_RAW_GYRO | DMP_FEATURE_GYRO_CAL;
+												DMP_FEATURE_SEND_RAW_ACCEL | DMP_FEATURE_SEND_CAL_GYRO | DMP_FEATURE_GYRO_CAL;
     dmp_enable_feature(hal.dmp_features);
     dmp_set_fifo_rate(MPU_DEFAULT_HZ);
     mpu_set_dmp_state(1);
@@ -3669,7 +3671,7 @@ void mpu_calc_euler_angles(void) {
 	
 	// Convert [rad] to [deg*100]
 	mpu.euler.roll 		= (int16_t)(roll  * RAD2DEG * 100 );
-	mpu.euler.pitch 	= (int16_t)(pitch * RAD2DEG * 100 -106 );
+	mpu.euler.pitch 	= (int16_t)(pitch * RAD2DEG * 100 -10);
 	mpu.euler.yaw 		= (int16_t)(yaw   * RAD2DEG * 100);
 	
 }
