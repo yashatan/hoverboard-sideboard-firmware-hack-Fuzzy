@@ -93,11 +93,11 @@ int main(void)
 	intro_demo_led(100);								// Short LEDs intro demo with 100 ms delay. This also gives some time for the MPU-6050 to power-up.	
 	if(mpu_config()) { 									// IMU MPU-6050 config
 		mpuStatus = ERROR;
-		gpio_bit_set(LED1_GPIO_Port, LED1_Pin);			// Turn on RED LED
+	//	gpio_bit_set(LED1_GPIO_Port, LED1_Pin);			// Turn on RED LED
 	}
 	else {
 		mpuStatus = SUCCESS;
-		gpio_bit_set(LED2_GPIO_Port, LED2_Pin);			// Turn on GREEN LED
+//		gpio_bit_set(LED2_GPIO_Port, LED2_Pin);			// Turn on GREEN LED
 	}
 //	mpu_handle_input('h'); 								// Print the User Help commands to serial
 
@@ -154,22 +154,22 @@ int main(void)
 		if (sensor1 == RESET && sensor1_read == SET) {
 			sensor1 = SET;
 			// Sensor ACTIVE: Do something here (one time task on activation)
-			gpio_bit_set(LED4_GPIO_Port, LED4_Pin);
-	//		consoleLog("-- SENSOR 1 Active --\n");		
+		//	gpio_bit_set(LED5_GPIO_Port, LED5_Pin);
+		//	consoleLog("-- SENSOR 1 Active --\n");		
 		} else if(sensor1 == SET && sensor1_read == RESET) {
 			sensor1 = RESET;
-			gpio_bit_reset(LED4_GPIO_Port, LED4_Pin);			
+//			gpio_bit_reset(LED5_GPIO_Port, LED5_Pin);			
 		}
 		
 		// SENSOR2
 		if (sensor2 == RESET && sensor2_read == SET) {			
 			sensor2 = SET;
 			// Sensor ACTIVE: Do something here (one time task on activation)
-			gpio_bit_set(LED5_GPIO_Port, LED5_Pin);
-//			consoleLog("-- SENSOR 2 Active --\n");
+	//		gpio_bit_set(LED5_GPIO_Port, LED5_Pin);
+	//				consoleLog("-- SENSOR 2 Active --\n");
 		} else if (sensor2 == SET && sensor2_read == RESET) {
 			sensor2 = RESET;
-			gpio_bit_reset(LED5_GPIO_Port, LED5_Pin);
+	//		gpio_bit_reset(LED5_GPIO_Port, LED5_Pin);
 		}
 
 		if (sensor1 == SET) {
