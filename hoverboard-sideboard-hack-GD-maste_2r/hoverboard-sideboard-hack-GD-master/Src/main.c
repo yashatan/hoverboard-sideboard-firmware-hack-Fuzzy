@@ -124,7 +124,8 @@ int main(void)
 			if(SET == usart_flag_get(USART_MAIN, USART_FLAG_RBNE)) { 	//  Check if Read Buffer Not Empty meanind Serial data is available
 					userCommand = usart_data_receive(USART_MAIN);
 					if (userCommand != 10 && userCommand != 13) { 		// Do not accept 'new line' (ascii 10) and 'carriage return' (ascii 13) commands
-							log_i("Command = %c\n", userCommand);						
+							log_i("Command = %c\n", userCommand);
+					//		log_i(" %d \n",angle_dot);						
 							mpu_handle_input(userCommand);
 					}
 			}
@@ -142,6 +143,7 @@ int main(void)
 		// Print MPU data to Console
 		if ((main_loop_counter % 100 == 0) ) {
 			mpu_print_to_console();
+		//	log_i(" %d \n",angle_dot);
 		}
 
 		
@@ -178,27 +180,22 @@ int main(void)
 		if (sensor2 == SET) {
 			// Sensor ACTIVE: Do something here (continuous task)
 		}
-			if (main_loop_counter % 5 == 0)
-				{
-					angle_dot = (mpu.euler.pitch - mpu.euler.pitch_old) * 200;
-					mpu.euler.pitch_old = mpu.euler.pitch;
-			//		log_i(" %d \n",angle_dot);
-				}
+		if (main_loop_counter % 10 == 0)
+		{
+			angle_dot = (mpu.euler.pitch - mpu.euler.pitch_old) * 100;
+			mpu.euler.pitch_old = mpu.euler.pitch;
+			
+		}
 		
 		// ==================================== SERIAL Tx/Rx Handling ====================================
 		#ifdef SERIAL_CONTROL
 			// To transmit on USART
 			if (main_loop_counter % 5 == 0 && SET == dma_flag_get(DMA_CH3, DMA_FLAG_FTF)) {		//  check if DMA channel transfer complete (Full Transfer Finish flag == 1)				
-				
 				Sideboard.start    	= (uint16_t)SERIAL_START_FRAME;
 				Sideboard.angle    	= (int16_t)mpu.euler.pitch;
 				Sideboard.angle_dot = (int16_t)angle_dot;
 				Sideboard.sensors		= (uint16_t)(sensor1 | (sensor2 << 1) | (mpuStatus << 2));
 				Sideboard.checksum 	= (uint16_t)(Sideboard.start ^ Sideboard.angle ^ Sideboard.angle_dot ^ Sideboard.sensors);
-					Command.start    = (uint16_t)SERIAL_START_FRAME;
-					Command.steer    = (int16_t) -100;
-					Command.speed    = (int16_t) 250;
-					Command.checksum = (uint16_t)(Command.start ^ Command.steer ^ Command.speed);
 				dma_channel_disable(DMA_CH3);
 				DMA_CHCNT(DMA_CH3) 		= sizeof(Sideboard);
 				DMA_CHMADDR(DMA_CH3) 	= (uint32_t)&Sideboard;

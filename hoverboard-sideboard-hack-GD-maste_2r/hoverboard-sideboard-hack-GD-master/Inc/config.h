@@ -43,7 +43,7 @@
 
 /* ==================================== SETTINGS MPU-6050 ==================================== */
 #define MPU_DMP_ENABLE												// [-] Enable flag for MPU-6050 DMP (Digital Motion Processing) functionality.
-#define MPU_DEFAULT_HZ  					20 					// [Hz] Default MPU frequecy: must be between 1Hz and 200Hz.
+#define MPU_DEFAULT_HZ  					100 					// [Hz] Default MPU frequecy: must be between 1Hz and 200Hz.
 #define TEMP_READ_MS    					500					// [ms] Temperature read time interval
 #define PEDO_READ_MS    					1000				// [ms] Pedometer read time interval
 // #define USE_CAL_HW_REGISTERS							    // [-] Uncommnent this to SAVE the sensor calibration to the MPU-6050 registers after the Self-test was run
