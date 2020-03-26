@@ -99,7 +99,7 @@ int main(void)
 		mpuStatus = SUCCESS;
 //		gpio_bit_set(LED2_GPIO_Port, LED2_Pin);			// Turn on GREEN LED
 	}
-//	mpu_handle_input('h'); 								// Print the User Help commands to serial
+	//mpu_handle_input('e'); 								// Print the User Help commands to serial
 
 	while(1) {
 		
@@ -210,7 +210,8 @@ int main(void)
 			if (NewFeedback.start == SERIAL_START_FRAME && NewFeedback.checksum == checksum) {
 				if (timeoutFlagSerial) {                	// Check for previous timeout flag  
 					if (timeoutCntSerial-- <= 0)            // Timeout de-qualification
-						timeoutFlagSerial = 0;              // Timeout flag cleared           
+					timeoutCntSerial =0;	
+					timeoutFlagSerial = 0;              // Timeout flag cleared           
 				} else {
 					memcpy(&Feedback, &NewFeedback, sizeof(Feedback));	// Copy the new data 
 					NewFeedback.start = 0xFFFF;             // Change the Start Frame for timeout detection in the next cycle
@@ -228,9 +229,10 @@ int main(void)
 				}
 			}
 							
-			if (timeoutFlagSerial && main_loop_counter % 100 == 0) {  	// In case of timeout bring the system to a Safe State and indicate error if desired
-				toggle_led(LED3_GPIO_Port, LED3_Pin);					// Toggle the Yellow LED every 100 ms
-			}	
+			if (timeoutFlagSerial && (main_loop_counter % 100 == 0)) {  	// In case of timeout bring the system to a Safe State and indicate error if desired
+			//	toggle_led(LED3_GPIO_Port, LED3_Pin);					// Toggle the Yellow LED every 100 ms
+			
+		  }	
 		#endif		
 		
 		main_loop_counter++;

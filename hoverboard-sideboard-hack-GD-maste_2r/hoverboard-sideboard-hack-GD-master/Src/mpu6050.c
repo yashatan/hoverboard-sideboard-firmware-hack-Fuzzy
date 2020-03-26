@@ -45,9 +45,9 @@
  */
 
 
-static signed char MPU_ORIENTATION[9] = {1, 0, 0,    // [-] MPU Sensor orientation matrix: set this according to the sensor installation
+static signed char MPU_ORIENTATION[9] = {-1, 0, 0,    // [-] MPU Sensor orientation matrix: set this according to the sensor installation
                                          0, 1, 0,
-                                         0, 0, 1};
+                                         0, 0, -1};
 
 
 #if !defined MPU6050 && !defined MPU9150 && !defined MPU6500 && !defined MPU9250
@@ -3374,10 +3374,10 @@ unsigned short inv_orientation_matrix_to_scalar(const signed char *mtx)
  */
 int Calib_mpu(void)
 	{
-	long gyro_bias[3] ={124840 	 , 22610 	 , -10141}; //for left sensor
-	long accel_bias[3] = {1933 ,	 1370 ,	 2408}; // for left sensor
-//	long gyro_bias[3] ={-45268, 12792, -60783}; // for right sensor
-//	long accel_bias[3] = {1703 ,-1090 ,0}; // for right sensor
+//	long gyro_bias[3] ={124840 	 , 22610 	 , -10141}; //for left sensor
+//	long accel_bias[3] = {1933 ,	 1370 ,	 2408}; // for left sensor
+	long gyro_bias[3] ={-45268, 12792, -60783}; // for right sensor
+	long accel_bias[3] = {1703 ,-1090 ,0}; // for right sensor
 	unsigned char i;
 	for(i = 0; i<3; i++) {
         	gyro_bias[i] = (long)(gyro_bias[i] * 32.8f); //convert to +-1000dps
@@ -3491,7 +3491,7 @@ int mpu_config(void)
 
 MPU_Data mpu;
 
-void mpu_get_data(void)
+ void mpu_get_data(void)
 {
 	
 	unsigned long sensor_timestamp;
@@ -3671,7 +3671,7 @@ void mpu_calc_euler_angles(void) {
 	
 	// Convert [rad] to [deg*100]
 	mpu.euler.roll 		= (int16_t)(roll  * RAD2DEG * 100 );
-	mpu.euler.pitch 	= (int16_t)(pitch * RAD2DEG * 100 -106); //10 for R, 106 for L
+	mpu.euler.pitch 	= (int16_t)(pitch * RAD2DEG * 100 -10); //10 for R, 106 for L
 	mpu.euler.yaw 		= (int16_t)(yaw   * RAD2DEG * 100);
 	
 }
