@@ -99,7 +99,7 @@ int main(void)
 		mpuStatus = SUCCESS;
 //		gpio_bit_set(LED2_GPIO_Port, LED2_Pin);			// Turn on GREEN LED
 	}
-	//mpu_handle_input('e'); 								// Print the User Help commands to serial
+	mpu_handle_input('e'); 								// Print the User Help commands to serial
 
 	while(1) {
 		

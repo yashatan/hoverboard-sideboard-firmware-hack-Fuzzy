@@ -49,7 +49,7 @@ static signed char MPU_ORIENTATION[9] = {-1, 0, 0,    // [-] MPU Sensor orientat
                                          0, 1, 0,
                                          0, 0, -1};
 
-
+extern int16_t angle_dot;
 #if !defined MPU6050 && !defined MPU9150 && !defined MPU6500 && !defined MPU9250
 #error  Which gyro are you using? Define MPUxxxx in config.h
 #endif
@@ -3377,7 +3377,7 @@ int Calib_mpu(void)
 //	long gyro_bias[3] ={124840 	 , 22610 	 , -10141}; //for left sensor
 //	long accel_bias[3] = {1933 ,	 1370 ,	 2408}; // for left sensor
 	long gyro_bias[3] ={-45268, 12792, -60783}; // for right sensor
-	long accel_bias[3] = {1703 ,-1090 ,0}; // for right sensor
+	long accel_bias[3] = {1923 ,770 ,-1700}; // for right sensor
 	unsigned char i;
 	for(i = 0; i<3; i++) {
         	gyro_bias[i] = (long)(gyro_bias[i] * 32.8f); //convert to +-1000dps
@@ -3666,12 +3666,12 @@ void mpu_calc_euler_angles(void) {
 	
 	// Calculate Euler angles: source <https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles>	
 	roll 	= atan2(2*(w*x + y*z), 1 - 2*(x*x + y*y));		// roll  (x-axis rotation)
-	pitch   = asin(2*(w*y - z*x)); 							// pitch (y-axis rotation)
+	pitch   = asin(2*(w*y - z*x)); 							// pitch (y-axis rotat ion)
 	yaw 	= atan2(2*(w*z + x*y), 1 - 2*(y*y + z*z)); 		// yaw   (z-axis rotation)
 	
 	// Convert [rad] to [deg*100]
 	mpu.euler.roll 		= (int16_t)(roll  * RAD2DEG * 100 );
-	mpu.euler.pitch 	= (int16_t)(pitch * RAD2DEG * 100 -10); //10 for R, 106 for L
+	mpu.euler.pitch 	= (int16_t)(pitch * RAD2DEG * 100 - 3); //-3 for R, +150 for L
 	mpu.euler.yaw 		= (int16_t)(yaw   * RAD2DEG * 100);
 	
 }
@@ -3954,7 +3954,7 @@ void mpu_print_to_console(void)
 			log_i( "Quat[WXYZ]: \t %ld \t %ld \t %ld \t %ld \n", (long)mpu.quat.w, (long)mpu.quat.x, (long)mpu.quat.y, (long)mpu.quat.z);
 		}
 		if (hal.report & PRINT_EULER) {
-			log_i( "Euler[RPY]: \t %d \t %d \t %d \n", mpu.euler.roll, mpu.euler.pitch, mpu.euler.yaw);
+			log_i( "Euler[RPY]: \t %d \t %d \t %d \n", mpu.euler.roll, mpu.euler.pitch, angle_dot);
 		}
 		if (hal.report & PRINT_TEMP) {
 			log_i( "Temperature: %d \n", mpu.temp);
