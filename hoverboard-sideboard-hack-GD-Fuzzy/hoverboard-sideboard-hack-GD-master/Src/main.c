@@ -49,14 +49,8 @@ SerialCommand Command;
 #ifdef SERIAL_FEEDBACK
 typedef struct{
 	uint16_t 	start;
-	int16_t 	cmd1;
-	int16_t 	cmd2;
-	int16_t 	speedR_meas;
-	int16_t 	speedL_meas;
-	int16_t 	batVoltage;
-	int16_t 	boardTemp;
 	uint16_t 	cmdLed;
-	uint16_t  	checksum;
+	uint16_t  checksum;
 } SerialFeedback;
 SerialFeedback Feedback;
 SerialFeedback NewFeedback;
@@ -205,8 +199,7 @@ int main(void)
 		
 		#ifdef SERIAL_FEEDBACK
 			uint16_t checksum;
-			checksum = (uint16_t)(NewFeedback.start ^ NewFeedback.cmd1 ^ NewFeedback.cmd2 ^ NewFeedback.speedR_meas ^ NewFeedback.speedL_meas
-								^ NewFeedback.batVoltage ^ NewFeedback.boardTemp ^ NewFeedback.cmdLed);
+			checksum = (uint16_t)(NewFeedback.start ^ NewFeedback.cmdLed);
 			if (NewFeedback.start == SERIAL_START_FRAME && NewFeedback.checksum == checksum) {
 				if (timeoutFlagSerial) {                	// Check for previous timeout flag  
 					if (timeoutCntSerial-- <= 0)            // Timeout de-qualification

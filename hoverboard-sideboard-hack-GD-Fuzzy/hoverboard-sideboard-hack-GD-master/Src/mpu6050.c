@@ -3671,7 +3671,7 @@ void mpu_calc_euler_angles(void) {
 	
 	// Convert [rad] to [deg*100]
 	mpu.euler.roll 		= (int16_t)(roll  * RAD2DEG * 100 );
-	mpu.euler.pitch 	= (int16_t)(pitch * RAD2DEG * 100 + 150); //-3 for R, +150 for L
+	mpu.euler.pitch 	= (int16_t)(pitch * RAD2DEG * 100 +150); //-3 for R, +150 for L
 	mpu.euler.yaw 		= (int16_t)(yaw   * RAD2DEG * 100);
 	
 }
